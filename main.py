@@ -1,5 +1,7 @@
 import os
 import sys
+from core.imgur import uploadToImgur
+import models
 from utils import prompt
 from utils.parse import load_games_list
 from utils.prompt import GameNameCompleter
@@ -11,6 +13,7 @@ from utils.text import (
     get_final_platform,
     get_year,
     normalize_game_name,
+    sanitize_game_name,
     split_and_check,
 )
 
@@ -61,7 +64,7 @@ from config.constants import (
 )
 from core.config import config, loadConfig
 from core.discord import DiscordIpcService
-from utils.cache import loadCache
+from utils.cache import getCacheKey, loadCache, setCacheKey
 from utils.logging import logger, formatter
 import logging
 import time
@@ -119,9 +122,35 @@ def main() -> None:
         state_display = platform_for_display
 
     large_key = sanitize_game_name(game_data["name"] + "_" + game_data["platform"])
-    print(large_key)
 
-    # set_discord_presence(game_data)
+    thumb_url_raw = game_data["image_url_medium"]
+    thumb_url_imgur = ""
+
+    if large_key and config["display"]["posters"]["enabled"]:
+        thumb_url_imgur = getCacheKey(large_key)
+        if not thumb_url_imgur and thumb_url_raw:
+            logger.debug("Uploading image to Imgur")
+
+            thumb_url_imgur = uploadToImgur(thumb_url_raw)
+            setCacheKey(large_key, thumb_url_imgur)
+
+    activity: models.discord.Activity = {
+        "details": game_data["name"],
+        "state": state_display,
+        "start": start_time,
+        "assets": {
+            "large_image": thumb_url_imgur or "logo",
+            "small_image": "small",
+        },
+    }
+
+    discordIpcService = DiscordIpcService(-1)
+
+    if not discordIpcService.connected:
+        discordIpcService.connect()
+    if discordIpcService.connected:
+        discordIpcService.setActivity(activity)
+
     while True:  # Keep the script running
         time.sleep(15)
 
