@@ -90,7 +90,7 @@ def init() -> None:
 def main() -> None:
     init()
 
-    PlexAlertListener()
+    plexAlertListener = PlexAlertListener()
 
     try:
         if isInteractive:
@@ -102,8 +102,7 @@ def main() -> None:
             while True:
                 time.sleep(3600)
     except KeyboardInterrupt:
-        for plexAlertListener in plexAlertListeners:
-            plexAlertListener.disconnect()
+        plexAlertListener.disconnect()
 
 
 def testIpc(ipcPipeNumber: int) -> None:
