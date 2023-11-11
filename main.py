@@ -102,7 +102,11 @@ def main() -> None:
 
     logger.info("%s: '%s'", "User selected game name", desired_game_name)
 
-    game_data = games_dict[desired_game_name]
+    normalized_game_name = normalize_game_name(desired_game_name)
+
+    logger.info("%s: '%s'", "Normalized", normalized_game_name)
+
+    game_data = games_dict[normalized_game_name]
 
     logger.debug("\n\n%s: '%s'\n", "Selected game data", game_data)
 
