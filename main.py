@@ -2,8 +2,10 @@ import os
 import sys
 from utils import prompt
 from utils.parse import load_games_list
-
 from utils.prompt import GameNameCompleter
+from prompt_toolkit import prompt
+
+
 from utils.text import normalize_game_name
 
 
