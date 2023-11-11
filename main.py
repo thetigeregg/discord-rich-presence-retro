@@ -106,10 +106,20 @@ def main() -> None:
     logger.info("\n\n%s: '%s'\n", "Selected game data", game_data)
 
     start_time = int(time.time())
+
+    logger.info("%s: '%s'", "Start time", start_time)
+
     platform_for_display = get_final_platform(game_data["platform"])
+
+    logger.info("%s: '%s'", "Platform for display", platform_for_display)
+
     region_for_display = split_and_check(game_data["labels"], REGION_LABELS)
 
+    logger.info("%s: '%s'", "Region for display", region_for_display)
+
     year = get_year(game_data["release_date"])
+
+    logger.info("%s: '%s'", "Game release year", year)
 
     if year:
         if region_for_display:
@@ -121,28 +131,43 @@ def main() -> None:
     else:
         state_display = platform_for_display
 
-    large_key = sanitize_game_name(game_data["name"] + "_" + game_data["platform"])
+    logger.info("%s: '%s'", "State for activity", state_display)
+
+    image_key = sanitize_game_name(game_data["name"] + "_" + game_data["platform"])
+
+    logger.info("%s: '%s'", "Image key", image_key)
 
     thumb_url_raw = game_data["image_url_medium"]
+
+    logger.info("%s: '%s'", "Original image URL", thumb_url_raw)
+
     thumb_url_imgur = ""
 
-    if large_key and config["display"]["posters"]["enabled"]:
-        thumb_url_imgur = getCacheKey(large_key)
-        if not thumb_url_imgur and thumb_url_raw:
+    if image_key and thumb_url_raw and config["display"]["posters"]["enabled"]:
+        thumb_url_imgur = getCacheKey(image_key)
+
+        logger.info("%s: '%s'", "Imgur image URL from cache", thumb_url_imgur)
+
+        if not thumb_url_imgur:
             logger.debug("Uploading image to Imgur")
 
             thumb_url_imgur = uploadToImgur(thumb_url_raw)
-            setCacheKey(large_key, thumb_url_imgur)
+
+            logger.info("%s: '%s'", "Imgur image URL after upload", thumb_url_imgur)
+
+            setCacheKey(image_key, thumb_url_imgur)
 
     activity: models.discord.Activity = {
         "details": game_data["name"],
         "state": state_display,
-        "start": start_time,
         "assets": {
             "large_image": thumb_url_imgur or "logo",
             "small_image": "small",
         },
+        "timestamps": {"start": round(start_time)},
     }
+
+    logger.info("%s: '%s'", "Final Discord activity", activity)
 
     discordIpcService = DiscordIpcService(-1)
 
