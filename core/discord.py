@@ -1,4 +1,4 @@
-from config.constants import discordClientID, isUnix, processID
+from config.constants import DISCORD_CLIENT_ID, IS_UNIX, PROCESS_ID
 from typing import Any, Optional
 from utils.logging import logger
 import asyncio
@@ -24,7 +24,7 @@ class DiscordIpcService:
                     ),
                 )
             )
-            if isUnix
+            if IS_UNIX
             else r"\\?\pipe"
         )
         self.ipcPipes = [
@@ -41,7 +41,7 @@ class DiscordIpcService:
             return
         for ipcPipe in self.ipcPipes:
             try:
-                if isUnix:
+                if IS_UNIX:
                     (
                         self.pipeReader,
                         self.pipeWriter,
@@ -58,7 +58,7 @@ class DiscordIpcService:
                     )[
                         0
                     ]  # pyright: ignore[reportGeneralTypeIssues,reportUnknownMemberType]
-                self.write(0, {"v": 1, "client_id": discordClientID})
+                self.write(0, {"v": 1, "client_id": DISCORD_CLIENT_ID})
                 if await self.read():
                     self.connected = True
                     logger.info(f"Connected to Discord IPC pipe {ipcPipe}")
@@ -152,7 +152,7 @@ class DiscordIpcService:
         payload = {
             "cmd": "SET_ACTIVITY",
             "args": {
-                "pid": processID,
+                "pid": PROCESS_ID,
                 "activity": activity,
             },
             "nonce": "{0:.2f}".format(time.time()),

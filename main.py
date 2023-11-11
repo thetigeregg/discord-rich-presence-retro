@@ -45,15 +45,14 @@ except Exception as e:
     )
 
 from config.constants import (
-    dataDirectoryPath,
-    logFilePath,
-    name,
-    version,
-    isInteractive,
+    DATA_DIRECTORY_PATH,
+    LOG_FILE_PATH,
+    NAME,
+    VERSION,
+    IS_INTERACTIVE,
 )
 from core.config import config, loadConfig
 from core.discord import DiscordIpcService
-from core.plex import PlexAlertListener
 from utils.cache import loadCache
 from utils.logging import logger, formatter
 import logging
@@ -61,23 +60,23 @@ import time
 
 
 def init() -> None:
-    if not os.path.exists(dataDirectoryPath):
-        os.mkdir(dataDirectoryPath)
+    if not os.path.exists(DATA_DIRECTORY_PATH):
+        os.mkdir(DATA_DIRECTORY_PATH)
 
     for oldFilePath in ["config.json", "cache.json", "console.log"]:
         if os.path.isfile(oldFilePath):
-            os.rename(oldFilePath, os.path.join(dataDirectoryPath, oldFilePath))
+            os.rename(oldFilePath, os.path.join(DATA_DIRECTORY_PATH, oldFilePath))
 
     loadConfig()
 
     if config["logging"]["debug"]:
         logger.setLevel(logging.DEBUG)
     if config["logging"]["writeToFile"]:
-        fileHandler = logging.FileHandler(logFilePath)
+        fileHandler = logging.FileHandler(LOG_FILE_PATH)
         fileHandler.setFormatter(formatter)
         logger.addHandler(fileHandler)
 
-    logger.info("%s - v%s", name, version)
+    logger.info("%s - v%s", NAME, VERSION)
     loadCache()
 
 
@@ -98,7 +97,7 @@ def main() -> None:
         time.sleep(15)
 
     try:
-        if isInteractive:
+        if IS_INTERACTIVE:
             while True:
                 userInput = input()
                 if userInput in ["exit", "quit"]:

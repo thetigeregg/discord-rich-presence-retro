@@ -1,8 +1,8 @@
-from config.constants import name
+from config.constants import NAME
 from typing import Any, Callable
 import logging
 
-logger = logging.getLogger(name)
+logger = logging.getLogger(NAME)
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter(
     "[%(asctime)s] [%(levelname)s] %(message)s", datefmt="%d-%m-%Y %I:%M:%S %p"

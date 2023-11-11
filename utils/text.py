@@ -1,7 +1,7 @@
 from typing import Optional
 import re
 import unidecode
-from config.constants import platform_clean_names, modern_platforms, region_labels
+from config.constants import PLATFORM_CLEAN_NAMES, MODERN_PLATFORMS, REGION_LABELS
 import time
 
 
@@ -25,8 +25,8 @@ def normalize_game_name(name):
 
 
 def get_final_platform(platform):
-    if platform in platform_clean_names:
-        return platform_clean_names[platform]
+    if platform in PLATFORM_CLEAN_NAMES:
+        return PLATFORM_CLEAN_NAMES[platform]
     else:
         return platform
 
@@ -61,7 +61,7 @@ def get_year(date_string):
 
 #     start_time = int(time.time())
 #     platform_display = get_final_platform(game_data["platform"])
-#     region_display = split_and_check(game_data["labels"], region_labels)
+#     region_display = split_and_check(game_data["labels"], REGION_LABELS)
 #     if region_display:
 #         region_display = ", " + region_display
 #     year = get_year(game_data["release_date"])

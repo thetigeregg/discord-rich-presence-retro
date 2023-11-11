@@ -1,4 +1,4 @@
-from config.constants import configFilePathRoot
+from config.constants import CONFIG_FILE_PATH_ROOT
 from utils.dict import copyDict
 from utils.logging import logger
 import json
@@ -39,12 +39,12 @@ def loadConfig() -> None:
     for i, (fileExtension, fileType) in enumerate(
         supportedConfigFileExtensions.items()
     ):
-        doesFileExist = os.path.isfile(f"{configFilePathRoot}.{fileExtension}")
+        doesFileExist = os.path.isfile(f"{CONFIG_FILE_PATH_ROOT}.{fileExtension}")
         isFirstItem = i == 0
         if doesFileExist or isFirstItem:
             configFileExtension = fileExtension
             configFileType = fileType
-            configFilePath = f"{configFilePathRoot}.{configFileExtension}"
+            configFilePath = f"{CONFIG_FILE_PATH_ROOT}.{configFileExtension}"
             if doesFileExist:
                 break
     if doesFileExist:
@@ -57,7 +57,7 @@ def loadConfig() -> None:
         except:
             os.rename(
                 configFilePath,
-                f"{configFilePathRoot}-{time.time():.0f}.{configFileExtension}",
+                f"{CONFIG_FILE_PATH_ROOT}-{time.time():.0f}.{configFileExtension}",
             )
             logger.exception(
                 "Failed to parse the config file. A new one will be created."
