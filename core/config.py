@@ -24,8 +24,6 @@ config: models.config.Config = {
     "users": [],
 }
 supportedConfigFileExtensions = {
-    "yaml": "yaml",
-    "yml": "yaml",
     "json": "json",
 }
 configFileExtension = ""
@@ -50,10 +48,7 @@ def loadConfig() -> None:
     if doesFileExist:
         try:
             with open(configFilePath, "r", encoding="UTF-8") as configFile:
-                if configFileType == "yaml":
-                    loadedConfig = yaml.safe_load(configFile) or {}
-                else:
-                    loadedConfig = json.load(configFile) or {}
+                loadedConfig = json.load(configFile) or {}
         except:
             os.rename(
                 configFilePath,
@@ -67,24 +62,10 @@ def loadConfig() -> None:
     saveConfig()
 
 
-class YamlSafeDumper(yaml.SafeDumper):
-    def increase_indent(self, flow: bool = False, indentless: bool = False) -> None:
-        return super().increase_indent(flow, False)
-
-
 def saveConfig() -> None:
     try:
         with open(configFilePath, "w", encoding="UTF-8") as configFile:
-            if configFileType == "yaml":
-                yaml.dump(
-                    config,
-                    configFile,
-                    sort_keys=False,
-                    Dumper=YamlSafeDumper,
-                    allow_unicode=True,
-                )
-            else:
-                json.dump(config, configFile, indent="\t")
-                configFile.write("\n")
+            json.dump(config, configFile, indent="\t")
+            configFile.write("\n")
     except:
         logger.exception("Failed to write to the config file")

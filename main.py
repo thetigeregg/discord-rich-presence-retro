@@ -63,10 +63,6 @@ def init() -> None:
     if not os.path.exists(DATA_DIRECTORY_PATH):
         os.mkdir(DATA_DIRECTORY_PATH)
 
-    for oldFilePath in ["config.json", "cache.json", "console.log"]:
-        if os.path.isfile(oldFilePath):
-            os.rename(oldFilePath, os.path.join(DATA_DIRECTORY_PATH, oldFilePath))
-
     loadConfig()
 
     if config["logging"]["debug"]:
