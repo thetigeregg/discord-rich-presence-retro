@@ -4,9 +4,15 @@ from utils import prompt
 from utils.parse import load_games_list
 from utils.prompt import GameNameCompleter
 from prompt_toolkit import prompt
+import logging
 
 
-from utils.text import normalize_game_name
+from utils.text import (
+    get_final_platform,
+    get_year,
+    normalize_game_name,
+    split_and_check,
+)
 
 
 try:
@@ -59,6 +65,7 @@ from utils.cache import loadCache
 from utils.logging import logger, formatter
 import logging
 import time
+from config.constants import REGION_LABELS
 
 
 def init() -> None:
@@ -89,7 +96,31 @@ def main() -> None:
         "Please enter a game name: ", completer=game_name_completer
     )
 
-    game_data = [normalize_game_name(desired_game_name)]
+    logger.info("%s: '%s'", "User selected game name", desired_game_name)
+
+    game_data = games_dict[desired_game_name]
+
+    logger.info("\n\n%s: '%s'\n", "Selected game data", game_data)
+
+    start_time = int(time.time())
+    platform_for_display = get_final_platform(game_data["platform"])
+    region_for_display = split_and_check(game_data["labels"], REGION_LABELS)
+
+    year = get_year(game_data["release_date"])
+
+    if year:
+        if region_for_display:
+            state_display = (
+                platform_for_display + " (" + year + ", " + region_for_display + ")"
+            )
+        else:
+            state_display = platform_for_display + " (" + year + ")"
+    else:
+        state_display = platform_for_display
+
+    large_key = sanitize_game_name(game_data["name"] + "_" + game_data["platform"])
+    print(large_key)
+
     # set_discord_presence(game_data)
     while True:  # Keep the script running
         time.sleep(15)

@@ -1,8 +1,7 @@
 from typing import Optional
 import re
 import unidecode
-from config.constants import PLATFORM_CLEAN_NAMES, MODERN_PLATFORMS, REGION_LABELS
-import time
+from config.constants import PLATFORM_CLEAN_NAMES
 
 
 def formatSeconds(seconds: int | float, joiner: Optional[str] = None) -> str:
@@ -50,24 +49,3 @@ def get_first_element(list):
 
 def get_year(date_string):
     return date_string.split("-")[0]
-
-
-# def set_discord_presence(game_data):
-#     client_id = get_client_id(
-#         game_data["platform"]
-#     )  # Replace with your app's client ID
-#     RPC = Presence(client_id)
-#     RPC.connect()
-
-#     start_time = int(time.time())
-#     platform_display = get_final_platform(game_data["platform"])
-#     region_display = split_and_check(game_data["labels"], REGION_LABELS)
-#     if region_display:
-#         region_display = ", " + region_display
-#     year = get_year(game_data["release_date"])
-#     state_display = (
-#         platform_display + " (" + (year or "") + (region_display or "") + ")"
-#     )
-
-#     large_key = sanitize_game_name(game_data["name"] + "_" + game_data["platform"])
-#     print(large_key)
