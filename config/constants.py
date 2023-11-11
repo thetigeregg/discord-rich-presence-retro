@@ -4,7 +4,6 @@ import sys
 NAME = "Discord Rich Presence for Retro"
 VERSION = "0.0.1"
 
-PLEX_CLIENT_ID = "discord-rich-presence-plex"
 DISCORD_CLIENT_ID = "413407336082833418"
 
 DATA_DIRECTORY_PATH = "data"
