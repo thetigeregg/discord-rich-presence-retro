@@ -37,12 +37,12 @@ def loadConfig() -> None:
     for i, (fileExtension, fileType) in enumerate(
         supportedConfigFileExtensions.items()
     ):
-        doesFileExist = os.path.isfile(f"{CONFIG_FILE_PATH}.{fileExtension}")
+        doesFileExist = os.path.isfile(f"{CONFIG_FILE_PATH}")
         isFirstItem = i == 0
         if doesFileExist or isFirstItem:
             configFileExtension = fileExtension
             configFileType = fileType
-            configFilePath = f"{CONFIG_FILE_PATH}.{configFileExtension}"
+            configFilePath = f"{CONFIG_FILE_PATH}"
             if doesFileExist:
                 break
     if doesFileExist:
@@ -52,7 +52,7 @@ def loadConfig() -> None:
         except:
             os.rename(
                 configFilePath,
-                f"{CONFIG_FILE_PATH}-{time.time():.0f}.{configFileExtension}",
+                f"{CONFIG_FILE_PATH}-{time.time():.0f}",
             )
             logger.exception(
                 "Failed to parse the config file. A new one will be created."
