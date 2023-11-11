@@ -4,7 +4,7 @@ import sys
 NAME = "Discord Rich Presence for Retro"
 VERSION = "0.0.1"
 
-DISCORD_CLIENT_ID = "413407336082833418"
+DISCORD_CLIENT_ID = "1172699413441949736"
 
 DATA_DIRECTORY_PATH = "data"
 CONFIG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "config.json")
