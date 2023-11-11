@@ -30,5 +30,8 @@ PLATFORM_CLEAN_NAMES = {
     "Sega Mega Drive/Genesis": "Sega Genesis",
     "Super Nintendo Entertainment System (SNES)": "SNES",
     "Nintendo Entertainment System (NES)": "NES",
-    "Family Computer Disk System": "Famicom Disk System (NES)",
+    "Family Computer Disk System": "Famicom Disk System",
+    "Family Computer (FAMICOM)": "Famicom",
+    "PC (Microsoft Windows)": "PC (Windows)",
+    "Super Famicom": "SNES",
 }

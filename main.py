@@ -11,6 +11,7 @@ import logging
 
 from utils.text import (
     get_final_platform,
+    get_final_region,
     get_year,
     normalize_game_name,
     sanitize_game_name,
@@ -103,19 +104,19 @@ def main() -> None:
 
     game_data = games_dict[desired_game_name]
 
-    logger.info("\n\n%s: '%s'\n", "Selected game data", game_data)
+    logger.debug("\n\n%s: '%s'\n", "Selected game data", game_data)
 
     start_time = int(time.time())
 
-    logger.info("%s: '%s'", "Start time", start_time)
+    logger.debug("%s: '%s'", "Start time", start_time)
 
-    platform_for_display = get_final_platform(game_data["platform"])
-
-    logger.info("%s: '%s'", "Platform for display", platform_for_display)
-
-    region_for_display = split_and_check(game_data["labels"], REGION_LABELS)
+    region_for_display = get_final_region(game_data["labels"])
 
     logger.info("%s: '%s'", "Region for display", region_for_display)
+
+    platform_for_display = get_final_platform(game_data, region_for_display)
+
+    logger.info("%s: '%s'", "Platform for display", platform_for_display)
 
     year = get_year(game_data["release_date"])
 
@@ -155,7 +156,8 @@ def main() -> None:
 
             logger.info("%s: '%s'", "Imgur image URL after upload", thumb_url_imgur)
 
-            setCacheKey(image_key, thumb_url_imgur)
+            if thumb_url_imgur is not None:
+                setCacheKey(image_key, thumb_url_imgur)
 
     activity: models.discord.Activity = {
         "details": game_data["name"],
