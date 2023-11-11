@@ -4,10 +4,6 @@ from .config import config
 from .discord import DiscordIpcService
 from .imgur import uploadToImgur
 from config.constants import name, plexClientID
-from plexapi.alert import AlertListener
-from plexapi.base import Playable, PlexPartialObject
-from plexapi.media import Genre, GuidTag
-from plexapi.myplex import MyPlexAccount, PlexServer
 from typing import Optional
 from utils.cache import getCacheKey, setCacheKey
 from utils.logging import LoggerWithPrefix
@@ -15,32 +11,8 @@ from utils.text import formatSeconds
 import models.config
 import models.discord
 import models.plex
-import requests
 import threading
 import time
-import urllib.parse
-
-
-def initiateAuth() -> tuple[str, str, str]:
-    response = requests.post(
-        "https://plex.tv/api/v2/pins.json?strong=true",
-        headers={
-            "X-Plex-Product": name,
-            "X-Plex-Client-Identifier": plexClientID,
-        },
-    ).json()
-    authUrl = f"https://app.plex.tv/auth#?clientID={plexClientID}&code={response['code']}&context%%5Bdevice%%5D%%5Bproduct%%5D={urllib.parse.quote(name)}"
-    return response["id"], response["code"], authUrl
-
-
-def getAuthToken(id: str, code: str) -> Optional[str]:
-    response = requests.get(
-        f"https://plex.tv/api/v2/pins/{id}.json?code={code}",
-        headers={
-            "X-Plex-Client-Identifier": plexClientID,
-        },
-    ).json()
-    return response["authToken"]
 
 
 class PlexAlertListener(threading.Thread):
