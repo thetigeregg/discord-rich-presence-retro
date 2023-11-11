@@ -8,7 +8,7 @@ PLEX_CLIENT_ID = "discord-rich-presence-plex"
 DISCORD_CLIENT_ID = "413407336082833418"
 
 DATA_DIRECTORY_PATH = "data"
-CONFIG_FILE_PATH_ROOT = os.path.join(DATA_DIRECTORY_PATH, "config")
+CONFIG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "config.json")
 CACHE_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "cache.json")
 LOG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "console.log")
 
