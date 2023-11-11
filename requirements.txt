@@ -1,3 +1,5 @@
 requests
 unidecode
 prompt_toolkit
+fuzzywuzzy
+python-Levenshtein
