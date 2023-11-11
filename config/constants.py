@@ -16,7 +16,7 @@ isUnix = sys.platform in ["linux", "darwin"]
 processID = os.getpid()
 isInteractive = sys.stdin and sys.stdin.isatty()
 containerDemotionUidGid = os.environ.get("DRPP_CONTAINER_DEMOTION_UID_GID", "")
-
+csvPath = ""
 modern_platforms = [
     "PC (Microsoft Windows)",
     "PlayStation 4",

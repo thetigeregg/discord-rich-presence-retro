@@ -1,5 +1,10 @@
 import os
 import sys
+from utils import prompt
+from utils.parse import load_games_list
+
+from utils.prompt import GameNameCompleter
+from utils.text import normalize_game_name
 
 
 try:
@@ -79,14 +84,16 @@ def init() -> None:
 def main() -> None:
     init()
 
-    # plexAlertListener = PlexAlertListener()
+    games_dict = load_games_list()
 
-    game_name_completer = GameNameCompleter()
+    game_name_completer = GameNameCompleter(games_dict)
+
     desired_game_name = prompt(
         "Please enter a game name: ", completer=game_name_completer
     )
-    game_data = load_games_list()[normalize_game_name(desired_game_name)]
-    set_discord_presence(game_data)
+
+    game_data = [normalize_game_name(desired_game_name)]
+    # set_discord_presence(game_data)
     while True:  # Keep the script running
         time.sleep(15)
 

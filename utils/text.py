@@ -1,6 +1,8 @@
 from typing import Optional
 import re
 import unidecode
+from config.constants import platform_clean_names, modern_platforms, region_labels
+import time
 
 
 def formatSeconds(seconds: int | float, joiner: Optional[str] = None) -> str:
@@ -50,35 +52,22 @@ def get_year(date_string):
     return date_string.split("-")[0]
 
 
-def get_client_id(platform):
-    if platform in modern_platforms:
-        return get_value_from_config_file("modernClientId")
-    else:
-        return get_value_from_config_file("retroClientId")
+# def set_discord_presence(game_data):
+#     client_id = get_client_id(
+#         game_data["platform"]
+#     )  # Replace with your app's client ID
+#     RPC = Presence(client_id)
+#     RPC.connect()
 
+#     start_time = int(time.time())
+#     platform_display = get_final_platform(game_data["platform"])
+#     region_display = split_and_check(game_data["labels"], region_labels)
+#     if region_display:
+#         region_display = ", " + region_display
+#     year = get_year(game_data["release_date"])
+#     state_display = (
+#         platform_display + " (" + (year or "") + (region_display or "") + ")"
+#     )
 
-def set_discord_presence(game_data):
-    client_id = get_client_id(
-        game_data["platform"]
-    )  # Replace with your app's client ID
-    RPC = Presence(client_id)
-    RPC.connect()
-
-    start_time = int(time.time())
-    platform_display = get_final_platform(game_data["platform"])
-    region_display = split_and_check(game_data["labels"], region_labels)
-    if region_display:
-        region_display = ", " + region_display
-    year = get_year(game_data["release_date"])
-    state_display = (
-        platform_display + " (" + (year or "") + (region_display or "") + ")"
-    )
-
-    large_key = sanitize_filename(game_data["name"] + "_" + game_data["platform"])
-    print(large_key)
-
-
-def get_value_from_config_file(key):
-    with open(config_path, "r") as file:
-        data = json.load(file)
-    return data.get(key, None)
+#     large_key = sanitize_game_name(game_data["name"] + "_" + game_data["platform"])
+#     print(large_key)

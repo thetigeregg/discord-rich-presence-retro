@@ -1,9 +1,12 @@
 import csv
 
+from utils.text import normalize_game_name
+from config.constants import csvPath
+
 
 def load_games_list():
     games_dict = {}
-    with open(get_value_from_config_file("csvPath"), "r") as file:
+    with open(csvPath, "r") as file:
         reader = csv.DictReader(file)
         for i, row in enumerate(reader):
             if i >= 5:
