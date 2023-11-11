@@ -79,7 +79,16 @@ def init() -> None:
 def main() -> None:
     init()
 
-    plexAlertListener = PlexAlertListener()
+    # plexAlertListener = PlexAlertListener()
+
+    game_name_completer = GameNameCompleter()
+    desired_game_name = prompt(
+        "Please enter a game name: ", completer=game_name_completer
+    )
+    game_data = load_games_list()[normalize_game_name(desired_game_name)]
+    set_discord_presence(game_data)
+    while True:  # Keep the script running
+        time.sleep(15)
 
     try:
         if isInteractive:
