@@ -160,10 +160,7 @@ def main() -> None:
     activity: models.discord.Activity = {
         "details": game_data["name"],
         "state": state_display,
-        "assets": {
-            "large_image": thumb_url_imgur or "logo",
-            "small_image": "small",
-        },
+        "assets": {"large_image": thumb_url_imgur or "logo"},
         "timestamps": {"start": round(start_time)},
     }
 
