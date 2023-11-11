@@ -11,6 +11,7 @@ DATA_DIRECTORY_PATH = "data"
 CONFIG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "config.json")
 CACHE_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "cache.json")
 LOG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "console.log")
+CSV_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "games-list.csv")
 
 IS_UNIX = sys.platform in ["linux", "darwin"]
 PROCESS_ID = os.getpid()
