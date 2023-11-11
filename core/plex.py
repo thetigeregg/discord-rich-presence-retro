@@ -49,21 +49,19 @@ class PlexAlertListener(threading.Thread):
     connectionTimeoutTimerInterval = 60
     maximumIgnores = 2
 
-    def __init__(self, token: str, serverConfig: models.config.Server):
+    def __init__(self):
         super().__init__()
         self.daemon = True
-        self.token = token
-        self.serverConfig = serverConfig
+        # self.token = token
+        # self.serverConfig = serverConfig
         self.logger = LoggerWithPrefix(
-            f"[{self.serverConfig['name']}] "
+            f"[{'Tye'}] "
         )  # pyright: ignore[reportTypedDictNotRequiredAccess]
-        self.discordIpcService = DiscordIpcService(
-            self.serverConfig.get("ipcPipeNumber")
-        )
+        self.discordIpcService = DiscordIpcService(-1)
         self.updateTimeoutTimer: Optional[threading.Timer] = None
         self.connectionTimeoutTimer: Optional[threading.Timer] = None
-        self.account: Optional[MyPlexAccount] = None
-        self.server: Optional[PlexServer] = None
+        # self.account: Optional[MyPlexAccount] = None
+        # self.server: Optional[PlexServer] = None
         self.alertListener: Optional[AlertListener] = None
         self.lastState, self.lastSessionKey, self.lastRatingKey = "", 0, 0
         self.listenForUser, self.isServerOwner, self.ignoreCount = "", False, 0
@@ -73,52 +71,23 @@ class PlexAlertListener(threading.Thread):
         connected = False
         while not connected:
             try:
-                self.logger.info("Signing into Plex")
-                self.account = MyPlexAccount(token=self.token)
-                self.logger.info("Signed in as Plex user '%s'", self.account.username)
-                self.listenForUser = (
-                    self.serverConfig.get("listenForUser", "") or self.account.username
+                self.logger.info("Starting listener")
+
+                self.logger.info("Connecting to %s", self.productName)
+
+                self.logger.info("Connected to %s", self.productName)
+
+                self.logger.info("Listening for alerts from user")
+                self.connectionTimeoutTimer = threading.Timer(
+                    self.connectionTimeoutTimerInterval, self.connectionTimeout
                 )
-                self.server = None
-                for resource in self.account.resources():
-                    if (
-                        resource.product == self.productName
-                        and resource.name.lower() == self.serverConfig["name"].lower()
-                    ):
-                        self.logger.info(
-                            "Connecting to %s '%s'",
-                            self.productName,
-                            self.serverConfig["name"],
-                        )
-                        self.server = resource.connect()
-                        try:
-                            self.server.account()
-                            self.isServerOwner = True
-                        except:
-                            pass
-                        self.logger.info(
-                            "Connected to %s '%s'", self.productName, resource.name
-                        )
-                        self.alertListener = AlertListener(
-                            self.server, self.handleAlert, self.reconnect
-                        )
-                        self.alertListener.start()
-                        self.logger.info(
-                            "Listening for alerts from user '%s'", self.listenForUser
-                        )
-                        self.connectionTimeoutTimer = threading.Timer(
-                            self.connectionTimeoutTimerInterval, self.connectionTimeout
-                        )
-                        self.connectionTimeoutTimer.start()
-                        connected = True
-                        break
-                if not self.server:
-                    raise Exception("Server not found")
+                self.connectionTimeoutTimer.start()
+                connected = True
+                break
             except Exception as e:
                 self.logger.error(
-                    "Failed to connect to %s '%s': %s",
+                    "Failed to connect to %s: %s",
                     self.productName,
-                    self.serverConfig["name"],
                     e,
                 )  # pyright: ignore[reportTypedDictNotRequiredAccess]
                 self.logger.error("Reconnecting in 10 seconds")

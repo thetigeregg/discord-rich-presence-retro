@@ -89,18 +89,9 @@ def init() -> None:
 
 def main() -> None:
     init()
-    if not config["users"]:
-        logger.info("No users found in the config file")
-        user = authNewUser()
-        if not user:
-            exit()
-        config["users"].append(user)
-        saveConfig()
-    plexAlertListeners = [
-        PlexAlertListener(user["token"], server)
-        for user in config["users"]
-        for server in user["servers"]
-    ]
+
+    PlexAlertListener()
+
     try:
         if isInteractive:
             while True:
@@ -113,33 +104,6 @@ def main() -> None:
     except KeyboardInterrupt:
         for plexAlertListener in plexAlertListeners:
             plexAlertListener.disconnect()
-
-
-def authNewUser() -> Optional[models.config.User]:
-    id, code, url = initiateAuth()
-    logger.info("Open the below URL in your web browser and sign in:")
-    logger.info(url)
-    time.sleep(5)
-    for i in range(35):
-        logger.info(
-            f"Checking whether authentication is successful ({formatSeconds((i + 1) * 5)})"
-        )
-        authToken = getAuthToken(id, code)
-        if authToken:
-            logger.info("Authentication successful")
-            serverName = os.environ.get("PLEX_SERVER_NAME")
-            if not serverName:
-                serverName = (
-                    input(
-                        "Enter the name of the Plex Media Server you wish to connect to: "
-                    )
-                    if isInteractive
-                    else "ServerName"
-                )
-            return {"token": authToken, "servers": [{"name": serverName}]}
-        time.sleep(5)
-    else:
-        logger.info(f"Authentication timed out ({formatSeconds(180)})")
 
 
 def testIpc(ipcPipeNumber: int) -> None:
