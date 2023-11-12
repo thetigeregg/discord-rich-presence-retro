@@ -182,18 +182,6 @@ def main() -> None:
     while True:  # Keep the script running
         time.sleep(15)
 
-    try:
-        if IS_INTERACTIVE:
-            while True:
-                userInput = input()
-                if userInput in ["exit", "quit"]:
-                    raise KeyboardInterrupt
-        else:
-            while True:
-                time.sleep(3600)
-    except KeyboardInterrupt:
-        plexAlertListener.disconnect()
-
 
 def testIpc(ipcPipeNumber: int) -> None:
     init()
