@@ -67,10 +67,7 @@ def get_final_region(label_string):
     logger.debug("%s: '%s'", "Region from label", region_label)
 
     if region_label is not None and region_label != "":
-        if region_label == "Japan":
-            return "JP"
-        elif region_label == "Europe":
-            return "EU"
+        return region_label
 
 
 def get_first_element(list):
