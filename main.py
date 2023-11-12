@@ -65,11 +65,19 @@ from config.constants import (
 )
 from core.config import config, loadConfig
 from core.discord import DiscordIpcService
-from utils.cache import getCacheKey, loadCache, setCacheKey, setRecentGame
+from utils.cache import (
+    getCacheKey,
+    loadCache,
+    setCacheKey,
+    setRecentGame,
+    getRecentGames,
+)
 from utils.logging import logger, formatter
 import logging
 import time
 from config.constants import REGION_LABELS
+from prompt_toolkit import PromptSession
+from prompt_toolkit.history import InMemoryHistory
 
 
 def init() -> None:
@@ -94,10 +102,17 @@ def main() -> None:
 
     games_dict = load_games_list()
 
+    history = InMemoryHistory()
+
+    recent_games = getRecentGames()
+    if recent_games:
+        for game_name in recent_games:
+            history.append_string(game_name)
+
     game_name_completer = GameNameCompleter(games_dict)
 
     desired_game_name = prompt(
-        "Please enter a game name: ", completer=game_name_completer
+        "Please enter a game name: ", completer=game_name_completer, history=history
     )
 
     logger.info("%s: '%s'", "User selected game name", desired_game_name)

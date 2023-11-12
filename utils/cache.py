@@ -35,8 +35,8 @@ def setCacheKey(key: str, value: Any) -> None:
         logger.exception("Failed to write to the cache file")
 
 
-def getRecentGames() -> Dict[str, dict]:
-    recents = {}
+def getRecentGames() -> List[str]:
+    recents = []
     if os.path.isfile(RECENTS_FILE_PATH):
         try:
             with open(RECENTS_FILE_PATH, "r", encoding="UTF-8") as recentsFile:
@@ -51,9 +51,10 @@ def setRecentGame(game: dict) -> None:
     game_name = normalize_game_name(
         game["name"]
     )  # assuming 'name' is a key in the game dict
-    recents[game_name] = game
+    if game_name not in recents:
+        recents.append(game_name)
     if len(recents) > 5:
-        recents = dict(list(recents.items())[1:])  # remove the oldest game
+        recents.pop(0)  # remove the oldest game
     try:
         with open(RECENTS_FILE_PATH, "w", encoding="UTF-8") as recentsFile:
             json.dump(recents, recentsFile, separators=(",", ":"))
