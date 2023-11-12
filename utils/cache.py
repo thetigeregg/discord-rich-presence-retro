@@ -51,8 +51,9 @@ def setRecentGame(game: dict) -> None:
     game_name = normalize_game_name(
         game["name"]
     )  # assuming 'name' is a key in the game dict
-    if game_name not in recents:
-        recents.append(game_name)
+    if game_name in recents:
+        recents.remove(game_name)
+    recents.append(game_name)
     if len(recents) > 5:
         recents.pop(0)  # remove the oldest game
     try:
