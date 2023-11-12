@@ -65,7 +65,7 @@ from config.constants import (
 )
 from core.config import config, loadConfig
 from core.discord import DiscordIpcService
-from utils.cache import getCacheKey, loadCache, setCacheKey
+from utils.cache import getCacheKey, loadCache, setCacheKey, setRecentGame
 from utils.logging import logger, formatter
 import logging
 import time
@@ -178,6 +178,7 @@ def main() -> None:
         discordIpcService.connect()
     if discordIpcService.connected:
         discordIpcService.setActivity(activity)
+        setRecentGame(game_data)
 
     while True:  # Keep the script running
         time.sleep(15)

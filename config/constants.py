@@ -8,6 +8,7 @@ DISCORD_CLIENT_ID = "1172699413441949736"
 
 DATA_DIRECTORY_PATH = "data"
 CONFIG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "config.json")
+RECENTS_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "recents.json")
 CACHE_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "cache.json")
 LOG_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "console.log")
 CSV_FILE_PATH = os.path.join(DATA_DIRECTORY_PATH, "games-list.csv")
