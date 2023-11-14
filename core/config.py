@@ -5,7 +5,6 @@ import json
 import models.config
 import os
 import time
-import yaml
 
 config: models.config.Config = {
     "logging": {
