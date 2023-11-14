@@ -3,3 +3,4 @@ unidecode
 prompt_toolkit
 fuzzywuzzy
 python-Levenshtein
+Pillow
